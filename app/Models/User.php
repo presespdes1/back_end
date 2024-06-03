@@ -45,6 +45,18 @@ class User extends Authenticatable
         ];
     }
 
+    //Relaciones
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function user_profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

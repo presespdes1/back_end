@@ -36,15 +36,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        Schema::create('user_profiles', function(Blueprint $table){
-            $table->string('id')->primary();
-            $table->foreignId('user_id');
-            $table->text('address')->nullable();
-            $table->string('phone', 20)->nullable();
-            $table->string('avatar', 255)->nullable();
-            $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); 
-        });
     }
 
     /**
@@ -55,6 +46,5 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-        Schema::dropIfExists('user_profiles');
     }
 };
