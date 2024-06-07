@@ -5,6 +5,8 @@ class CustomerEntityBuilder
 {
     private $id;
     private $name;
+    private $role;
+    private $token;
     private $email;
     private $emailVerifiedAt;
     private $password;
@@ -19,6 +21,16 @@ class CustomerEntityBuilder
 
     public function setName($name){
         $this->name = $name;
+        return $this;
+    }
+
+    public function setRole($role){
+        $this->role = $role;
+        return $this;
+    }
+
+    public function setToken($token){
+        $this->token = $token;
         return $this;
     }
 
@@ -57,6 +69,8 @@ class CustomerEntityBuilder
         (
             $this->id,
             $this->name,
+            $this->role,
+            $this->token,
             $this->email,
             $this->emailVerifiedAt,
             $this->password,

@@ -5,6 +5,8 @@ class CustomerEntity
 {
     private $id;
     private $name;
+    private $role;
+    private $token;
     private $email;
     private $emailVerifiedAt;
     private $password;
@@ -16,6 +18,8 @@ class CustomerEntity
     (
         $id,
         $name,
+        $role,
+        $token,
         $email,
         $emailVerifiedAt,
         $password,
@@ -26,6 +30,8 @@ class CustomerEntity
     {
         $this->id = $id;
         $this->name = $name;
+        $this->role = $role;
+        $this->token = $token;
         $this->email = $email;
         $this->emailVerifiedAt = $emailVerifiedAt;
         $this->password = $password;
@@ -40,6 +46,14 @@ class CustomerEntity
 
     public function getName(){
         return $this->name;
+    }
+
+    public function getRole(){
+        return $this->role;
+    }
+
+    public function getToken(){
+        return $this->token;
     }
 
     public function getEmail(){
