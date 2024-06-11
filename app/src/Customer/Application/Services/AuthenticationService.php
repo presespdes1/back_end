@@ -2,33 +2,38 @@
 namespace App\src\Customer\Application\Services;
 
 use App\src\Customer\Domain\Contracts\IAuthentication;
+use App\src\Customer\Domain\DTOs\RegisterDto;
 use App\src\Customer\Domain\Entities\CustomerEntity;
+use App\src\Customer\Domain\Entities\CustomerEntityBuilder;
 use Nette\NotImplementedException;
 
-class AuthenticationService implements IAuthentication
+class AuthenticationService
 {
-    public function me(): CustomerEntity
+    private $authService;
+    private $customerBuilder;
+
+    public function __construct(IAuthentication $service, CustomerEntityBuilder $customerBuilder)
     {
-        throw new NotImplementedException;
+        $this->authService = $service;
+        $this->customerBuilder = $customerBuilder;
     }
 
-    public function register(): CustomerEntity
+    public function customerRegister(RegisterDto $registerDto)
     {
-        throw new NotImplementedException;        
-    }
+        //Registro
+         $customerRegistered = $this->authService->register($registerDto->toArray());
+        //Login
+         $token = $this->authService->login([
+            'email' => $registerDto->getEmail(),
+            'password' => $registerDto->getPassword()
+         ]);dd($token);
+         //Customer's Entity
+         return $this->customerBuilder
+            ->setToken($token)
+            ->setId($customerRegistered->getId())
+            ->setName($customerRegistered->getName())
+            ->setRole($customerRegistered->getRole())
+            ->build();
 
-    public function login(): CustomerEntity
-    {
-        throw new NotImplementedException;
-    }
-
-    public function logout(): CustomerEntity
-    {
-        throw new NotImplementedException;        
-    }
-
-    public function refresh(): CustomerEntity
-    {
-        throw new NotImplementedException;
     }
 }

@@ -28,4 +28,13 @@ class RegisterDto
     {
         return $this->password;
     }
+
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password
+        ];
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\src\Customer\Infrastructure\Dependencies;
 
+use App\src\Customer\Domain\Contracts\IAuthentication;
+use App\src\Customer\Infrastructure\Adapters\LaravelAuthenticationAdapter;
 use Illuminate\Support\ServiceProvider;
 
 class CustomerServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class CustomerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-         
+         $this->app->bind(IAuthentication::class, LaravelAuthenticationAdapter::class);
     }
 
     /**

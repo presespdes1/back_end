@@ -5,13 +5,13 @@ use App\src\Customer\Domain\Entities\CustomerEntity;
 
 interface IAuthentication
 {
-    public function me():CustomerEntity;
+    public function me();
 
-    public function register():CustomerEntity;
+    public function register($data);
 
-    public function login(): CustomerEntity;
+    public function login($data);
 
-    public function logout(): CustomerEntity;
+    public function logout();
 
-    public function refresh(): CustomerEntity;
+    public function refresh();
 }

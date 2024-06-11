@@ -9,4 +9,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+
+//Solo para pruebas
 Route::delete('/user/delete/{id}', [AuthController::class, 'delete']);
+Route::post('/register', [AuthController::class, 'register']);
