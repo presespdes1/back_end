@@ -26,7 +26,7 @@ class AuthenticationService
          $token = $this->authService->login([
             'email' => $registerDto->getEmail(),
             'password' => $registerDto->getPassword()
-         ]);dd($token);
+         ]);
          //Customer's Entity
          return $this->customerBuilder
             ->setToken($token)

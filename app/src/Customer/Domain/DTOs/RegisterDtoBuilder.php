@@ -6,6 +6,7 @@ class RegisterDtoBuilder
     private $name;
     private $email;
     private $password;
+    private $passwordConfirmation;
 
     public function setName($value)
     {
@@ -25,9 +26,20 @@ class RegisterDtoBuilder
         return $this;
     }
 
+    public function setPasswordConfirmation($value)
+    {
+        $this->passwordConfirmation = $value;
+        return $this;
+    }
+
     public function build()
     {
-        return new RegisterDto($this->name, $this->email, $this->password);
+        return new RegisterDto(
+            $this->name, 
+            $this->email, 
+            $this->password,
+            $this->passwordConfirmation
+        );
     }
 
 

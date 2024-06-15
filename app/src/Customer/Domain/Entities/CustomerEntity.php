@@ -79,4 +79,14 @@ class CustomerEntity
     public function getUpdatedAt(){
         return $this->updatedAt;
     }
+
+    public function toArrayResponse()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'role' => $this->getRole(),
+            'token' => $this->getToken()
+        ];
+    }
 }
