@@ -27,8 +27,8 @@ class AuthController extends Controller
         $this->customResponse = $customResponse;
     }
     
-    public function login(){
-
+    public function login(Request $request){
+        
     }
 
     public function register(Request $request)
