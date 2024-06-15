@@ -7,6 +7,7 @@ use App\src\Customer\Application\Services\AuthenticationService;
 use App\src\Customer\Domain\DTOs\RegisterDtoBuilder;
 use App\src\Customer\Domain\Exceptions\InvalidRegisterArgumentException;
 use App\src\Response\Domain\Contracts\ICustomResponse;
+use Exception;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -50,7 +51,21 @@ class AuthController extends Controller
                 
         }
         catch (InvalidRegisterArgumentException $ex) {
-            
+            return $this->customResponse->responseTo(
+                false,
+                $ex->getMessage(),
+                $ex->getData(),
+                422
+            );
+        }
+        catch (Exception $ex)
+        {
+            return $this->customResponse->responseTo(
+                false,
+                $ex->getMessage(),
+                "",
+                $ex->getCode()
+            );
         }
        
       
