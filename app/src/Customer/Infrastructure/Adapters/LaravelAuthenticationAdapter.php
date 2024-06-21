@@ -5,8 +5,8 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\src\Customer\Domain\Contracts\IAuthentication;
 use App\src\Customer\Domain\Entities\CustomerEntityBuilder;
-use App\src\Customer\Domain\Exceptions\InvalidRegisterArgumentException;
-use App\src\Customer\Domain\Exceptions\InvalidRegisterArgumentExceptionBuilder;
+use App\src\Customer\Domain\Exceptions\InvalidLoginArgumentException;
+use App\src\Customer\Domain\Exceptions\InvalidLoginArgumentExceptionBuilder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -14,18 +14,18 @@ use Illuminate\Support\Facades\Validator;
 class LaravelAuthenticationAdapter implements IAuthentication
 {
     private $customerEntityBuilder;
-    private $registerDataExceptionBuilder;
+    private $loginExceptionBuilder; 
 
     public function __construct(
         CustomerEntityBuilder $customerEntityBuilder,
-        InvalidRegisterArgumentExceptionBuilder $registerDataExceptionBuilder
+        InvalidLoginArgumentExceptionBuilder $loginExceptionBuilder
     )
     {
         $this->customerEntityBuilder = $customerEntityBuilder;
-        $this->registerDataExceptionBuilder = $registerDataExceptionBuilder;
+        $this->loginExceptionBuilder = $loginExceptionBuilder;        
     }
 
-    public function me()
+    public function getCustomerAuthenticated()
     {
         $user = User::find(Auth::user()->id);
         return $this->customerEntityBuilder
@@ -36,47 +36,18 @@ class LaravelAuthenticationAdapter implements IAuthentication
             ->build();
     }
 
-    public function register($data)
+  
+    public function login($data)
     {
         $validateData = Validator::make($data, [
-            'name' => 'required|min:3',
-            'email' => 'required|unique:users|email',
-            'password' => 'required|min:6',
-            'password_confirmation' => 'required|min:6|same:password'
+            'email' => 'required|email',            
+            'password' => 'required|min:6'            
         ]);       
-        if($validateData->fails())
-        {
-            throw $this->registerDataExceptionBuilder
+        if($validateData->fails()){
+            throw $this->loginExceptionBuilder
                 ->setData($validateData->errors())
                 ->build();
         }
-        //User save
-        $customer = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password'])
-        ]);
-        $customer->save();
-
-        //User's profile default save
-        UserProfile::create([
-            'user_id' => $customer->id          
-        ])->save();
-
-        //User's role attach
-        $customer->roles()->attach(2);
-
-        //User's Entity  
-        return $this->customerEntityBuilder
-            ->setId($customer->id)
-            ->setName($customer->name)
-            ->setEmail($customer->email)
-            ->setRole($customer->roles()->first()->name)            
-            ->build();
-    }
-
-    public function login($data)
-    {
         return Auth::attempt($data);
     }
 

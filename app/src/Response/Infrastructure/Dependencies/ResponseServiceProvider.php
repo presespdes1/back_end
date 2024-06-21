@@ -13,7 +13,7 @@ class ResponseServiceProvider extends ServiceProvider
      */
     public function register()
     {
-         $this->app->singleton(ICustomResponse::class, LaravelCustomResponse::class);
+         $this->app->bind(ICustomResponse::class, LaravelCustomResponse::class);
     }
 
     /**
