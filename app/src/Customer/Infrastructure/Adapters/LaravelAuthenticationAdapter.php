@@ -27,13 +27,9 @@ class LaravelAuthenticationAdapter implements IAuthentication
 
     public function getCustomerAuthenticated()
     {
-        $user = User::find(Auth::user()->id);
-        return $this->customerEntityBuilder
-            ->setId($user->id)
-            ->setName($user->name)
-            ->setEmail($user->email)
-            ->setRole($user->roles()->first()->name)        
-            ->build();
+        $user = $this->getUserAuthenticated();
+        $token = Auth::tokenById($user->id);
+        return $this->getCustomerEntity($user, $token);
     }
 
   
@@ -48,16 +44,38 @@ class LaravelAuthenticationAdapter implements IAuthentication
                 ->setData($validateData->errors())
                 ->build();
         }
+        
         return Auth::attempt($data);
     }
 
     public function logout()
     {
-        
+        $user = $this->getUserAuthenticated();
+        Auth::logout();
+        return $this->getCustomerEntity($user);
+
     }
 
     public function refresh()
     {
-        
+        $user = $this->getUserAuthenticated();
+        $token = Auth::refresh();
+        return $this->getCustomerEntity($user, $token);
+    }
+
+    private function getCustomerEntity($user = null, $token = null)
+    {
+        return $this->customerEntityBuilder
+        ->setId($user->id)
+        ->setName($user->name)
+        ->setEmail($user->email)
+        ->setToken($token)
+        ->setRole($user->roles()->first()->name)        
+        ->build();
+    }
+
+    private function getUserAuthenticated()
+    {
+        return User::find(Auth::user()->id);
     }
 }

@@ -69,12 +69,16 @@ class AuthenticationService
                 ->setData($loginDto->toArray())
                 ->build();
         }
-        $customer = $this->authService->getCustomerAuthenticated();
-        return  $this->customerBuilder
-        ->setToken($token)
-        ->setId($customer->getId())
-        ->setName($customer->getName())
-        ->setRole($customer->getRole())
-        ->build();
+        return  $this->authService->getCustomerAuthenticated();
+    }
+
+    public function customerLogout()
+    {
+       return $this->authService->logout();
+    }
+
+    public function customerRefresh()
+    {
+        return $this->authService->refresh();
     }
 }

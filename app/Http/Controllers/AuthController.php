@@ -12,6 +12,7 @@ use App\src\Customer\Domain\Exceptions\InvalidRegisterArgumentException;
 use App\src\Response\Domain\Contracts\ICustomResponse;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -108,11 +109,23 @@ class AuthController extends Controller
 
     public function logout()
     {
-
+        $customer = $this->authService->customerLogout();
+        return $this->customResponse->responseTo(
+            true,
+            "Cliente deslogueado satisfactoriamente",
+            $customer->toArrayResponse(),
+            200
+        );
     }
 
     public function refresh()
     {
-        
+        $customer = $this->authService->customerRefresh();
+        return $this->customResponse->responseTo(
+            true,
+            "Token refrescado satisfactoriamente",
+            $customer->toArrayResponse(),
+            200
+        );
     }
 }
